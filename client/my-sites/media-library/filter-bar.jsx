@@ -83,6 +83,10 @@ export class MediaLibraryFilterBar extends Component {
 		this.props.onFilterChange( filter );
 	};
 
+	changeSource = source => {
+		this.props.onSourceChange( source );
+	};
+
 	renderTabItems() {
 		const tabs = this.props.source === '' ? [ '', 'images', 'documents', 'videos', 'audio' ] : [];
 
@@ -95,6 +99,21 @@ export class MediaLibraryFilterBar extends Component {
 				disabled={ this.isFilterDisabled( filter ) }
 			>
 				{ this.getFilterLabel( filter ) }
+			</FilterItem>
+		);
+	}
+
+	renderSourceItem() {
+		const nextService = this.props.source === '' ? 'google_photos' : '';
+		const { translate } = this.props;
+		const services = {
+			'': 'WordPress',
+			google_photos: translate( 'Photos from Google' ),
+		};
+
+		return (
+			<FilterItem onChange={ this.changeSource } value={ nextService }>
+				{ services[ this.props.source ] }
 			</FilterItem>
 		);
 	}
@@ -131,6 +150,7 @@ export class MediaLibraryFilterBar extends Component {
 			<div className="media-library__filter-bar">
 				<SectionNav selectedText={ this.getFilterLabel( this.props.filter ) } hasSearch={ true }>
 					<SectionNavTabs>
+						{ this.renderSourceItem() }
 						{ this.renderTabItems() }
 					</SectionNavTabs>
 					{ this.renderSearchSection() }
