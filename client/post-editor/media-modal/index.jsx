@@ -144,7 +144,13 @@ export class EditorMediaModal extends Component {
 				settings: this.state.gallerySettings
 			} : undefined;
 
-		this.props.onClose( value );
+		if ( value && this.state.source !== '' ) {
+			const targetSource = this.state.source;
+
+			this.onSourceChange( '', () => MediaActions.addExternal( this.props.site.ID, mediaLibrarySelectedItems, targetSource ) );
+		} else {
+			this.props.onClose( value );
+		}
 	};
 
 	setDetailSelectedIndex = index => {
