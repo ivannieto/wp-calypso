@@ -198,6 +198,14 @@ const MediaLibraryContent = React.createClass( {
 		);
 	},
 
+	getThumbnailType() {
+		if ( this.props.site.is_private ) {
+			return MEDIA_IMAGE_RESIZER;
+		}
+
+		return MEDIA_IMAGE_PHOTON;
+	},
+
 	renderMediaList: function() {
 		if ( ! this.props.site ) {
 			return <MediaLibraryList key="list-loading" />;

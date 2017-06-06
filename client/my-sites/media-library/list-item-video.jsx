@@ -10,6 +10,8 @@ var React = require( 'react' ),
 var ListItemFileDetails = require( './list-item-file-details' ),
 	Gridicon = require( 'gridicons' );
 
+import { MEDIA_IMAGE_THUMBNAIL, MEDIA_IMAGE_PHOTON } from 'lib/media/constants';
+
 module.exports = React.createClass( {
 	displayName: 'MediaLibraryListItemVideo',
 
@@ -21,7 +23,8 @@ module.exports = React.createClass( {
 
 	getDefaultProps: function() {
 		return {
-			maxImageWidth: 450
+			maxImageWidth: 450,
+			thumbnailType: MEDIA_IMAGE_PHOTON,
 		};
 	},
 
