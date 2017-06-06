@@ -67,6 +67,11 @@ module.exports = React.createClass( {
 			query.mime_type = utils.getMimeBaseTypeFromFilter( props.filter );
 		}
 
+		if ( props.source ) {
+			query.source = props.source;
+			query.path = 'recent';
+		}
+
 		return query;
 	},
 
