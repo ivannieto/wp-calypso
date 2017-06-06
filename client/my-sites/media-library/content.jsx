@@ -9,6 +9,9 @@ import head from 'lodash/head';
 import values from 'lodash/values';
 import mapValues from 'lodash/mapValues';
 import groupBy from 'lodash/groupBy';
+import toArray from 'lodash/toArray';
+import some from 'lodash/some';
+import { translate } from 'i18n-calypso';
 
 /**
  * Internal dependencies
@@ -28,6 +31,8 @@ import {
 import { getSiteSlug } from 'state/sites/selectors';
 import MediaLibraryHeader from './header';
 import MediaLibraryList from './list';
+import { requestKeyringConnections } from 'state/sharing/keyring/actions';
+import { isKeyringConnectionsFetching } from 'state/sharing/keyring/selectors';
 
 const MediaLibraryContent = React.createClass( {
 	propTypes: {
@@ -50,6 +55,12 @@ const MediaLibraryContent = React.createClass( {
 			mediaValidationErrors: Object.freeze( {} ),
 			onAddMedia: noop
 		};
+	},
+
+	componentWillMount: function() {
+		if ( ! this.props.isRequesting ) {
+			this.props.requestKeyringConnections();
+		}
 	},
 
 	renderErrors: function() {
@@ -173,9 +184,27 @@ const MediaLibraryContent = React.createClass( {
 		return MEDIA_IMAGE_PHOTON;
 	},
 
+	renderExternalMedia() {
+		if ( this.props.isRequesting ) {
+			return (
+				<MediaLibraryList key="list-loading" />
+			);
+		}
+
+		return (
+			<div>
+				<p>{ translate( 'You will need to connect your account to view your media. Go to the Sharing tab.' ) }</p>
+			</div>
+		);
+	},
+
 	renderMediaList: function() {
 		if ( ! this.props.site ) {
 			return <MediaLibraryList key="list-loading" />;
+		}
+
+		if ( this.props.source !== '' && ! some( this.props.connectedServices, item => item.service === this.props.source ) ) {
+			this.renderExternalMedia();
 		}
 
 		return (
@@ -223,6 +252,10 @@ const MediaLibraryContent = React.createClass( {
 
 export default connect( ( state, ownProps ) => {
 	return {
-		siteSlug: ownProps.site ? getSiteSlug( state, ownProps.site.ID ) : ''
+		connectedServices: toArray( state.sharing.keyring.items ).filter( item => item.type === 'other' && item.status === 'ok' ),
+		siteSlug: ownProps.site ? getSiteSlug( state, ownProps.site.ID ) : '',
+		isRequesting: isKeyringConnectionsFetching( state ),
 	};
-}, null, null, { pure: false } )( MediaLibraryContent );
+}, {
+	requestKeyringConnections,
+}, null, { pure: false } )( MediaLibraryContent );
