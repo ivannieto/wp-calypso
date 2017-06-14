@@ -60,7 +60,7 @@ class StoreStatsListView extends Component {
 			limit: '100'
 		};
 		return (
-			<Main className="store-stats woocommerce" wideLayout={ true }>
+			<Main className="store-stats__list-view woocommerce" wideLayout={ true }>
 				<HeaderCake onClick={ this.goBack }>{ titles[ type ] }</HeaderCake>
 				<StatsPeriodNavigation
 					date={ selectedDate }
