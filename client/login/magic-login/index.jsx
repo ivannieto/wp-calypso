@@ -93,7 +93,7 @@ class MagicLogin extends React.Component {
 				'magic-login': true,
 				'magic-login__request_link': ! magicLoginView,
 			} }>
-				<PageViewTracker path="/login" title="Login" />
+				<PageViewTracker path="/log-in/link" title="Login" />
 
 				<GlobalNotices id="notices" notices={ notices.list } />
 
