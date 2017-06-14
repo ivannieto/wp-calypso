@@ -21,6 +21,7 @@ import {
 	SOCIAL_CREATE_ACCOUNT_FAILURE,
 	SOCIAL_CREATE_ACCOUNT_SUCCESS,
 	SOCIAL_LOGIN_REQUEST_FAILURE,
+	USER_RECEIVE,
 } from 'state/action-types';
 
 export const isRequesting = createReducer( false, {
@@ -94,6 +95,7 @@ export const socialAccount = createReducer( { isCreating: false }, {
 		...state,
 		requestError: error
 	} ),
+	[ USER_RECEIVE ]: state => ( { ...state, bearerToken: null, username: null } )
 } );
 
 export default combineReducers( {
